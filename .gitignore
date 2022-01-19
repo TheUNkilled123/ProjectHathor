@@ -1,0 +1,36 @@
+# Ignore project files
+*Project.sln
+*.idea/
+*.vs/
+
+# Ignore generated folders
+*Binaries/*
+*Build/*
+*Intermediate/*
+*DerivedDataCache/*
+*Saved/*
+*enc_temp_folder/*
+*Content/StarterContent/
+*Content/FXVarietyPack/
+*Debug/*
+*Collections/*
+*AssetExport/*
+*Content/*
+
+# Ignore the same things for plugins
+*Plugins/**/Binaries/*
+*Plugins/**/Build/*
+*Plugins/**/Intermediate/*
+*Plugins/**/DerivedDataCache/*
+*Plugins/**/Saved/*
+
+# Don't ignore icon files in Build
+!*Build/Linux
+!*Build/Windows
+
+# Don't ignore useful content files
+!Content/Assets/
+!Content/Blueprints/
+!Content/Collections/
+!Content/DataTables/
+!Content/Character_Appearance_Dissolve/
