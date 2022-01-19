@@ -19,7 +19,7 @@ EBTNodeResult::Type UBTTask_FocusTarget::ExecuteTask(UBehaviorTreeComponent& Own
 	BB = OwnerComp.GetBlackboardComponent();
 	ThisController = OwnerComp.GetAIOwner();
 	
-	TargetActor = Cast<AHathorAiCharacterBase>(BB->GetValueAsObject(GetSelectedBlackboardKey()));
+	TargetActor = Cast<AActor>(BB->GetValueAsObject(GetSelectedBlackboardKey()));
 
 	ThisController->SetFocus(TargetActor, EAIFocusPriority::Gameplay);
 	

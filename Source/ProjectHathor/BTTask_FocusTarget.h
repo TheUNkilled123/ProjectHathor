@@ -22,7 +22,7 @@ private:
 
 	AAIController* ThisController;
 
-	class AHathorAiCharacterBase* TargetActor;
+	AActor* TargetActor;
 
 protected:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
