@@ -38,6 +38,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float attackRange02 = 500.f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float moveUseCooldown = 15.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float conditionCooldown = 5.f;
+
 private:
 	bool bIntroComplete = false;
 
