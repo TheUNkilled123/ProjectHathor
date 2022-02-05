@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "Particles/ParticleSystemComponent.h"
 #include "ProjectileBase.generated.h"
 
 
@@ -23,45 +24,38 @@ protected:
 
 private:
 
+	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
+	AActor* MyOwner = nullptr;
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void FloorHit();
+
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UProjectileMovementComponent* ProjectileMovement;
-	
+
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UStaticMeshComponent* ProjectileMesh;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Damage")
+	UPROPERTY(EditDefaultsOnly, Category = "Projectile attributes")
 	TSubclassOf<UDamageType> DamageType;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Effects")
+	UPROPERTY(EditDefaultsOnly, Category = "Projectile attributes")
 	UParticleSystem* HitParticle;
 
-
-
-	UPROPERTY(EditAnywhere, Category = "Audio")
+	UPROPERTY(EditAnywhere, Category = "Projectile attributes")
 	USoundBase* HitSound;
-	UPROPERTY(EditAnywhere, Category = "Audio")
+
+	UPROPERTY(EditAnywhere, Category = "Projectile attributes")
 	USoundBase* LaunchSound;
 
 
-	//Default projectile values
-	UPROPERTY(EditAnywhere)
-	float initialSpeed = 1000.f;
-	UPROPERTY(EditAnywhere)
-	float gravityScale = 1.f;
-	UPROPERTY(EditAnywhere)
-	float bounciness = 10.f;
-	UPROPERTY(EditAnywhere, Category = "Damage")
+	UPROPERTY(EditAnywhere, Category = "Projectile attributes")
 	float damageAmount = 10.f;
 
-	UPROPERTY(EditAnywhere)
-	bool bShouldProjectileBounce = false;
-
-	UPROPERTY(EditAnywhere)
-	FVector projectileVelocity = FVector(0.f, 0.f, 200.f);
 };
