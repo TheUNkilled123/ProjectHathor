@@ -34,7 +34,8 @@ void AProjectileBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	ProjectileMesh->OnComponentHit.AddDynamic(this, &AProjectileBase::OnHit);
+	ProjectileMesh->OnComponentBeginOverlap.AddDynamic(this, &AProjectileBase::OnHit);
+	ProjectileMesh->OnComponentHit.AddDynamic(this, &AProjectileBase::OnHitBlocked);
 
 	MyOwner = GetOwner();
 
@@ -52,8 +53,27 @@ void AProjectileBase::Tick(float DeltaTime)
 }
 
 
+void AProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (!MyOwner)
+	{
+		return;
+	}
 
-void AProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+	if (OtherActor && OtherActor != this && OtherActor != MyOwner)
+	{
+		if(Cast<AController>(OtherActor->GetInstigatorController()) != nullptr)
+		{
+			UGameplayStatics::ApplyDamage(OtherActor, damageAmount, MyOwner->GetInstigatorController(), MyOwner, DamageType);
+			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitParticle, GetActorLocation());
+			UGameplayStatics::PlaySoundAtLocation(this, HitSound, GetActorLocation());
+			Destroy();
+		}
+	}
+
+}
+
+void AProjectileBase::OnHitBlocked(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	if (!MyOwner)
 	{
@@ -64,21 +84,11 @@ void AProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UP
 	{
 		if (OtherActor->ActorHasTag("Floor"))
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Projectile hit floor!"));
 			//Create area of effect
 			FloorHit();
-
-			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitParticle, GetActorLocation());
-			UGameplayStatics::PlaySoundAtLocation(this, HitSound, GetActorLocation());
-			Destroy();
-		}
-		else if(Cast<AController>(OtherActor->GetInstigatorController()) != nullptr)
-		{
-			UGameplayStatics::ApplyDamage(OtherActor, damageAmount, MyOwner->GetInstigatorController(), MyOwner, DamageType);
 			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitParticle, GetActorLocation());
 			UGameplayStatics::PlaySoundAtLocation(this, HitSound, GetActorLocation());
 			Destroy();
 		}
 	}
-
 }
