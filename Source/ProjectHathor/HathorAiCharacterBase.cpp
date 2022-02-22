@@ -11,6 +11,8 @@ AHathorAiCharacterBase::AHathorAiCharacterBase()
 	PrimaryActorTick.bCanEverTick = true;
 
 	currentValue = 1.f;
+
+	Health = DefaultHealth;
 }
 
 // Called when the game starts or when spawned
@@ -20,6 +22,8 @@ void AHathorAiCharacterBase::BeginPlay()
 
 	bIntroComplete = false;
 	UE_LOG(LogTemp, Warning, TEXT("New value: %f"), currentValue);
+
+	thisWorld = GetWorld();
 }
 
 // Called every frame
@@ -38,7 +42,7 @@ void AHathorAiCharacterBase::animateIntro(float DeltaTime)
 {
 	newValue = FMath::FInterpTo(currentValue, 0.f, DeltaTime, appearSpeed);
 
-	UKismetMaterialLibrary::SetScalarParameterValue(GetWorld(), materialCollection, TEXT("Dissolve"), newValue);
+	UKismetMaterialLibrary::SetScalarParameterValue(thisWorld, materialCollection, TEXT("Dissolve"), newValue);
 	currentValue = newValue;
 	
 	if (FMath::IsNearlyEqual(newValue, 0.f))
@@ -46,4 +50,14 @@ void AHathorAiCharacterBase::animateIntro(float DeltaTime)
 		UE_LOG(LogTemp, Warning, TEXT("GETERDONEEEEEEEEEEEE"));
 		bIntroComplete = true;
 	}
+}
+
+float AHathorAiCharacterBase::TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	if (Health <= 0.f)
+	{
+		UKismetMaterialLibrary::SetScalarParameterValue(thisWorld, materialCollection, TEXT("Dissolve"), 1.f);
+		bIsDead = true;
+	}
+	return Damage;
 }

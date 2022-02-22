@@ -149,6 +149,7 @@ void AMagicianPlayerController::Spell()
 	}
 
 	CurrentAction = Action::Idle;
+	toggleCanvas();
 }
 
 //DO SHTI LIEK DIS TO STOP THE ZOOM ZOOM OF CAM WHILE DOODLE DOODLE ON PAPER
