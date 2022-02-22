@@ -8,7 +8,7 @@
 #include "Particles/ParticleSystemComponent.h"
 #include "ProjectileBase.generated.h"
 
-
+class AAoeEffectActor;
 UCLASS()
 class PROJECTHATHOR_API AProjectileBase : public AActor
 {
@@ -56,6 +56,9 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Projectile attributes")
 	USoundBase* LaunchSound;
+
+	UPROPERTY(EditAnywhere, Category = "Projectile attributes")
+	TSubclassOf<AAoeEffectActor> GroundActorToSpawn;
 
 
 	UPROPERTY(EditAnywhere, Category = "Projectile attributes")

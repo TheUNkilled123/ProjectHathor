@@ -3,6 +3,7 @@
 
 #include "ProjectileBase.h"
 #include "Kismet/GameplayStatics.h"
+#include "ProjectHathor/GestureRec/AoeEffectActor.h"
 
 // Sets default values
 AProjectileBase::AProjectileBase()
@@ -84,7 +85,14 @@ void AProjectileBase::OnHitBlocked(UPrimitiveComponent* HitComp, AActor* OtherAc
 	{
 		if (OtherActor->ActorHasTag("Floor"))
 		{
-			//Create area of effect
+			if (GroundActorToSpawn != nullptr)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Spawning aoe"));
+				FActorSpawnParameters SpawnParams;
+				FRotator Rot;
+				FVector Pos = this->GetActorLocation();
+				AAoeEffectActor* AoeActor = GetWorld()->SpawnActor<AAoeEffectActor>(GroundActorToSpawn, Hit.ImpactPoint, Rot, SpawnParams);
+			}
 			FloorHit();
 			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitParticle, GetActorLocation());
 			UGameplayStatics::PlaySoundAtLocation(this, HitSound, GetActorLocation());
